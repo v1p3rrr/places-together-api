@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "users_group")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Group {
     private String name;
 
     @Column(nullable = false)
-    private String groupPictureLink;
+    private String groupPictureLink = "";
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<GroupPlace> groupPlaces = new HashSet<>();

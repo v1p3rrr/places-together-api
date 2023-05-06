@@ -1,6 +1,7 @@
 package com.vpr.placestogetherapi.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email(message = "Please provide a valid email address")
     @Column(nullable = false, unique = true)
     private String email;
 
