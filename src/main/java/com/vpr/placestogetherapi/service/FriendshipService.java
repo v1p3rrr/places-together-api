@@ -4,5 +4,7 @@ import com.vpr.placestogetherapi.model.entity.Friendship;
 import com.vpr.placestogetherapi.model.entity.Profile;
 
 public interface FriendshipService {
-    Friendship addFriendship(Profile profileA, Profile profileB);
+    Friendship requestFriendship(Profile profileRequest, Profile profileAccept);
+    Friendship acceptFriendship(Profile profileRequest, Profile profileAccept);
+    void removeFriendship(Profile profileRequest, Profile profileAccept);
 }

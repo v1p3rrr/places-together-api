@@ -8,5 +8,5 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
-    Optional<Friendship> findByProfile1AndProfile2(Profile profile1, Profile profile2);
+    Optional<Friendship> findByProfileRequestAndProfileAccept(Profile profile1, Profile profile2);
 }

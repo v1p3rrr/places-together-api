@@ -5,26 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class GroupPlace {
+public class RatingPlace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "group_place_id")
+    private GroupPlace groupPlace;
 
     @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
-    @OneToMany(mappedBy = "groupPlace", cascade = CascadeType.ALL)
-    private Set<CommentPlace> comments = new HashSet<>();
+    @Column
+    private Integer stars;
 }

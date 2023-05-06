@@ -1,5 +1,6 @@
 package com.vpr.placestogetherapi.model.entity;
 
+import com.vpr.placestogetherapi.model.enums.GroupMemberRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,6 @@ public class GroupMembership {
     private Profile profile;
 
     @Column(nullable = false)
-    private String role; //todo enum
+    @Enumerated(EnumType.STRING)
+    private GroupMemberRole role;
 }

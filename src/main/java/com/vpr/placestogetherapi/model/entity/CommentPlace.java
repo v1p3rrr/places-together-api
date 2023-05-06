@@ -1,30 +1,32 @@
 package com.vpr.placestogetherapi.model.entity;
 
-import com.vpr.placestogetherapi.model.enums.FriendshipStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Friendship {
-
+public class CommentPlace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "profile_request_id")
-    private Profile profileRequest;
+    @JoinColumn(name = "group_place_id")
+    private GroupPlace groupPlace;
 
     @ManyToOne
-    @JoinColumn(name = "profile_accept_id")
-    private Profile profileAccept;
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private FriendshipStatus status;
+    private String commentText;
+
+    @Column(nullable = false)
+    private LocalDateTime createdTimestamp;
 }
