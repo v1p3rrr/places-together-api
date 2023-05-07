@@ -35,12 +35,18 @@ public class Profile {
     private Set<GroupMembership> memberships = new HashSet<>();
 
     @OneToMany(mappedBy = "profileRequest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Friendship> friendship_request = new HashSet<>();
+    private Set<Friendship> friendshipRequest = new HashSet<>();
 
     @OneToMany(mappedBy = "profileAccept", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Friendship> friendship_accept = new HashSet<>();
+    private Set<Friendship> friendshipAccept = new HashSet<>();
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    private Set<MarkPlace> marks = new HashSet<>();
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     private Set<CommentPlace> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    private Set<RatingPlace> ratings = new HashSet<>();
 
 }

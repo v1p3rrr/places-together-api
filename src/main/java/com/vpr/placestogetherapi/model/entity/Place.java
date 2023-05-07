@@ -18,7 +18,7 @@ public class Place {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private Long dGisId;
+    private Long dgisId;
 
     @Column(nullable = false, unique = true)
     private String name;

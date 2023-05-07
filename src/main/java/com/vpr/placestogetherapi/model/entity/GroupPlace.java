@@ -26,5 +26,11 @@ public class GroupPlace {
     private Place place;
 
     @OneToMany(mappedBy = "groupPlace", cascade = CascadeType.ALL)
+    private Set<MarkPlace> marks = new HashSet<>();
+
+    @OneToMany(mappedBy = "groupPlace", cascade = CascadeType.ALL)
     private Set<CommentPlace> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "groupPlace", cascade = CascadeType.ALL)
+    private Set<RatingPlace> ratings = new HashSet<>();
 }

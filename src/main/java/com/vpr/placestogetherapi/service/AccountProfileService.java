@@ -3,14 +3,37 @@ package com.vpr.placestogetherapi.service;
 import com.vpr.placestogetherapi.model.entity.Account;
 import com.vpr.placestogetherapi.model.entity.Profile;
 
+import java.util.List;
+
 public interface AccountProfileService {
-    public Account createAccountWithGeneratedProfile(Account account);
 
-    public Profile createProfileAndLinkToAccount(Profile profile, Long accountId);
+    Account getAccount(Long accountId);
 
-    public Account changePassword(Long accountId, String newPassword);
+    Profile getProfile(Long profileId);
 
-    public void deleteAccount(Long accountId);
+    List<Profile> getProfilesByPartOfName(String partOfName);
 
-    public Profile changeUsername(Long profileId, String newUsername);
+    Account getAccountByEmail(String email);
+
+    Profile getProfileByAccountEmail(String email);
+
+    Account getAccountByProfileUsername(String username);
+
+    Profile getProfileByUsername(String username);
+
+    Account createAccountWithGeneratedProfile(Account account);
+
+    Profile createProfileAndLinkToAccount(Profile profile, Long accountId);
+
+    Account changePassword(Long accountId, String newPassword);
+
+    Account changeEmail(Long accountId, String newEmail);
+
+    void deleteAccount(Long accountId);
+
+    Profile changeUsername(Long profileId, String newUsername);
+
+    Profile changeStatus(Long profileId, String newStatus);
+
+    Profile changeProfilePicture(Long profileId, String newProfilePictureLink);
 }

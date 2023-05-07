@@ -11,7 +11,10 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,44 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final ProfileRepository profileRepository;
     private final GroupMembershipRepository groupMembershipRepository;
-    private final EntityManager entityManager;
+    //private final EntityManager entityManager;
+
+    @Override
+    public Group getGroupById(Long groupId) {
+        return groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
+    }
+
+    @Override
+    public Group getGroupByName(String groupName) {
+        return groupRepository.findByName(groupName)
+                .orElseThrow(() -> new NoSuchElementException("Group not found with name: " + groupName));
+    }
+
+    @Override
+    public List<Group> getGroupsByProfileId(Long profileId) {
+        return groupRepository.findByMembershipsProfileId(profileId);
+    }
+
+    @Override
+    public List<Group> getGroupsByPartOfName(String partOfName) {
+        return groupRepository.findByNameContainingIgnoreCase(partOfName);
+    }
+
+    @Override
+    public Set<GroupMembership> getGroupMembershipsByGroupId(Long groupId) {
+        return groupMembershipRepository.findByGroupId(groupId);
+    }
+
+    @Override
+    public Set<GroupMembership> getGroupMembershipsByProfileId(Long profileId) {
+        return groupMembershipRepository.findByProfileId(profileId);
+    }
+
+    @Override
+    public GroupMembership getGroupMembershipByGroupIdAndProfileId(Long groupId, Long profileId) {
+        return groupMembershipRepository.findByGroupIdAndProfileId(groupId, profileId)
+                .orElseThrow(() -> new NoSuchElementException("Profile with id " + profileId + " not found in group with id " + groupId));
+    }
 
     @Override
     public Group createGroup(String groupName, Long adminProfileId) {
@@ -40,7 +80,7 @@ public class GroupServiceImpl implements GroupService {
 
         groupMembershipRepository.save(groupMembership);
 
-        entityManager.refresh(adminProfile);
+        //entityManager.refresh(adminProfile);
 
         return savedGroup;
     }

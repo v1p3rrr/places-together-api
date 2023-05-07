@@ -2,24 +2,40 @@ package com.vpr.placestogetherapi.service;
 
 import com.vpr.placestogetherapi.model.entity.Group;
 import com.vpr.placestogetherapi.model.entity.GroupMembership;
-import com.vpr.placestogetherapi.model.entity.Profile;
+
+import java.util.List;
+import java.util.Set;
 
 public interface GroupService {
-    public Group createGroup(String groupName, Long adminProfileId);
+    Group getGroupById(Long groupId);
 
-    public GroupMembership inviteProfileToGroup(Long groupId, Long invitedProfileId);
+    Group getGroupByName(String groupName);
 
-    public GroupMembership promoteMemberToModerator(Long groupId, Long adminProfileId, Long promotedProfileId);
+    List<Group> getGroupsByProfileId(Long profileId);
 
-    public GroupMembership promoteToAdmin(Long groupId, Long adminProfileId, Long promotedProfileId);
+    Set<GroupMembership> getGroupMembershipsByGroupId(Long groupId);
 
-    public GroupMembership demoteModeratorToMember(Long groupId, Long adminProfileId, Long demotedProfileId);
+    Set<GroupMembership> getGroupMembershipsByProfileId(Long groupId);
 
-    public void leaveGroup(Long groupId, Long leavingProfileId);
+    GroupMembership getGroupMembershipByGroupIdAndProfileId(Long groupId, Long profileId);
 
-    public void removeMemberByModerator(Long groupId, Long moderatorProfileId, Long removedProfileId);
+    List<Group> getGroupsByPartOfName(String partOfName);
 
-    public void removeMemberByAdmin(Long groupId, Long adminProfileId, Long removedProfileId);
+    Group createGroup(String groupName, Long adminProfileId);
 
-    public void deleteGroup(Long groupId, Long adminProfileId);
+    GroupMembership inviteProfileToGroup(Long groupId, Long invitedProfileId);
+
+    GroupMembership promoteMemberToModerator(Long groupId, Long adminProfileId, Long promotedProfileId);
+
+    GroupMembership promoteToAdmin(Long groupId, Long adminProfileId, Long promotedProfileId);
+
+    GroupMembership demoteModeratorToMember(Long groupId, Long adminProfileId, Long demotedProfileId);
+
+    void leaveGroup(Long groupId, Long leavingProfileId);
+
+    void removeMemberByModerator(Long groupId, Long moderatorProfileId, Long removedProfileId);
+
+    void removeMemberByAdmin(Long groupId, Long adminProfileId, Long removedProfileId);
+
+    void deleteGroup(Long groupId, Long adminProfileId);
 }
