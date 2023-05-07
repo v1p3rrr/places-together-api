@@ -35,31 +35,31 @@ public class RatingController {
 
     @GetMapping("/{groupId}/by-profile/{profileId}")
     public ResponseEntity<List<RatingPlace>> getRatingsByGroupIdAndProfileId(@PathVariable Long groupId, @PathVariable Long profileId) {
-        List<RatingPlace> ratings = ratingService.getCommentsByGroupIdAndProfileId(groupId, profileId);
+        List<RatingPlace> ratings = ratingService.getRatingsByGroupIdAndProfileId(groupId, profileId);
         return ResponseEntity.ok(ratings);
     }
 
     @GetMapping("/{groupId}/by-dgis/{dgisId}")
     public ResponseEntity<List<RatingPlace>> getRatingsByGroupIdAndDgisId(@PathVariable Long groupId, @PathVariable Long dgisId) {
-        List<RatingPlace> ratings = ratingService.getCommentsByGroupIdAndDgisId(groupId, dgisId);
+        List<RatingPlace> ratings = ratingService.getRatingsByGroupIdAndDgisId(groupId, dgisId);
         return ResponseEntity.ok(ratings);
     }
 
     @GetMapping("/{groupId}/by-name/{placeName}")
     public ResponseEntity<List<RatingPlace>> getRatingsByGroupIdAndPlaceName(@PathVariable Long groupId, @PathVariable String placeName) {
-        List<RatingPlace> ratings = ratingService.getCommentsByGroupIdAndPlaceName(groupId, placeName);
+        List<RatingPlace> ratings = ratingService.getRatingsByGroupIdAndPlaceName(groupId, placeName);
         return ResponseEntity.ok(ratings);
     }
 
     @GetMapping("/{groupId}/by-profile/{profileId}/by-dgis/{dgisId}")
     public ResponseEntity<RatingPlace> getRatingByGroupIdAndProfileIdAndDgisId(@PathVariable Long groupId, @PathVariable Long profileId, @PathVariable Long dgisId) {
-        RatingPlace ratingPlace = ratingService.getCommentByGroupIdAndProfileIdAndDgisId(groupId, profileId, dgisId);
+        RatingPlace ratingPlace = ratingService.getRatingByGroupIdAndProfileIdAndDgisId(groupId, profileId, dgisId);
         return ResponseEntity.ok(ratingPlace);
     }
 
     @GetMapping("/{groupId}/by-profile/{profileId}/by-name/{placeName}")
     public ResponseEntity<RatingPlace> getRatingByGroupIdAndProfileIdAndPlaceName(@PathVariable Long groupId, @PathVariable Long profileId, @PathVariable String placeName) {
-        RatingPlace ratingPlace = ratingService.getCommentByGroupIdAndProfileIdAndPlaceName(groupId, profileId, placeName);
+        RatingPlace ratingPlace = ratingService.getRatingByGroupIdAndProfileIdAndPlaceName(groupId, profileId, placeName);
         return ResponseEntity.ok(ratingPlace);
     }
 

@@ -8,6 +8,7 @@ import com.vpr.placestogetherapi.repository.GroupPlaceRepository;
 import com.vpr.placestogetherapi.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +22,7 @@ public class RatingServiceImpl implements RatingService {
     private final GroupMembershipRepository groupMembershipRepository;
 
     @Override
+    @Transactional
     public RatingPlace addRating(Long profileId, Long groupId, Long placeDgisId, Integer stars) {
         Profile profile = profileRepository.findById(profileId).orElseThrow(() -> new NoSuchElementException("Profile not found"));
         GroupPlace groupPlace = groupPlaceRepository.findByGroupIdAndPlace_dgisId(groupId, placeDgisId).orElseThrow(() -> new NoSuchElementException("GroupPlace not found"));
@@ -34,6 +36,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public RatingPlace updateRating(Long editorProfileId, Long groupId, Long placeDgisId, Long ratingId, Integer newStars) {
         Profile profile = profileRepository.findById(editorProfileId)
                 .orElseThrow(() -> new NoSuchElementException("Profile not found"));
@@ -50,6 +53,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public void deleteRating(Long editorProfileId, Long groupId, Long placeDgisId, Long ratingId) {
         Profile profile = profileRepository.findById(editorProfileId)
                 .orElseThrow(() -> new NoSuchElementException("Editor's profile not found"));
@@ -64,28 +68,33 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingPlace> getCommentsByGroupIdAndProfileId(Long groupId, Long profileId) {
+    @Transactional(readOnly = true)
+    public List<RatingPlace> getRatingsByGroupIdAndProfileId(Long groupId, Long profileId) {
         return ratingRepository.findByGroupPlaceGroupIdAndProfileId(groupId, profileId);
     }
 
     @Override
-    public List<RatingPlace> getCommentsByGroupIdAndDgisId(Long groupId, Long dgisId) {
+    @Transactional(readOnly = true)
+    public List<RatingPlace> getRatingsByGroupIdAndDgisId(Long groupId, Long dgisId) {
         return ratingRepository.findByGroupPlaceGroupIdAndGroupPlace_Place_dgisId(groupId, dgisId);
     }
 
     @Override
-    public List<RatingPlace> getCommentsByGroupIdAndPlaceName(Long groupId, String placeName) {
+    @Transactional(readOnly = true)
+    public List<RatingPlace> getRatingsByGroupIdAndPlaceName(Long groupId, String placeName) {
         return ratingRepository.findByGroupPlaceGroupIdAndGroupPlacePlaceName(groupId, placeName);
     }
 
     @Override
-    public RatingPlace getCommentByGroupIdAndProfileIdAndDgisId(Long groupId, Long profileId, Long dgisId) {
+    @Transactional(readOnly = true)
+    public RatingPlace getRatingByGroupIdAndProfileIdAndDgisId(Long groupId, Long profileId, Long dgisId) {
         return ratingRepository.findByGroupPlaceGroupIdAndProfileIdAndGroupPlace_Place_dgisId(groupId, profileId, dgisId)
                 .orElseThrow(() -> new NoSuchElementException("Rating not found"));
     }
 
     @Override
-    public RatingPlace getCommentByGroupIdAndProfileIdAndPlaceName(Long groupId, Long profileId, String placeName) {
+    @Transactional(readOnly = true)
+    public RatingPlace getRatingByGroupIdAndProfileIdAndPlaceName(Long groupId, Long profileId, String placeName) {
         return ratingRepository.findByGroupPlaceGroupIdAndProfileIdAndGroupPlacePlaceName(groupId, profileId, placeName)
                 .orElseThrow(() -> new NoSuchElementException("Rating not found"));
     }

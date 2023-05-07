@@ -23,6 +23,8 @@ public interface AccountProfileService {
 
     Account createAccountWithGeneratedProfile(Account account);
 
+    Account createAccountWithoutProfile(Account account);
+
     Profile createProfileAndLinkToAccount(Profile profile, Long accountId);
 
     Account changePassword(Long accountId, String newPassword);
@@ -36,4 +38,6 @@ public interface AccountProfileService {
     Profile changeStatus(Long profileId, String newStatus);
 
     Profile changeProfilePicture(Long profileId, String newProfilePictureLink);
+
+    Profile updateProfile(Long profileId, Profile profile);
 }

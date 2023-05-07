@@ -28,7 +28,7 @@ public class AccountProfileController {
         return ResponseEntity.ok(profile);
     }
 
-    @GetMapping("account/username/{profileUsername}")
+    @GetMapping("username/{profileUsername}")
     public ResponseEntity<Account> getAccountByUsername(@PathVariable String profileUsername) {
         Account account = accountProfileService.getAccountByProfileUsername(profileUsername);
         return ResponseEntity.ok(account);
@@ -61,6 +61,12 @@ public class AccountProfileController {
     @PostMapping("/create-with-generated-profile")
     public ResponseEntity<Account> createAccountWithGeneratedProfile(@RequestBody Account account) {
         Account savedAccount = accountProfileService.createAccountWithGeneratedProfile(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Account> createAccountWithoutProfile(@RequestBody Account account) {
+        Account savedAccount = accountProfileService.createAccountWithoutProfile(account);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
     }
 
@@ -103,6 +109,12 @@ public class AccountProfileController {
     @PatchMapping("/profile/{profileId}/change-profile-picture")
     public ResponseEntity<Profile> changeProfilePicture(@PathVariable Long profileId, @RequestBody String newProfilePictureLink) {
         Profile updatedProfile = accountProfileService.changeProfilePicture(profileId, newProfilePictureLink);
+        return ResponseEntity.ok(updatedProfile);
+    }
+
+    @PutMapping("/profile/{profileId}/update-profile")
+    public ResponseEntity<Profile> changeProfilePicture(@PathVariable Long profileId, @RequestBody Profile profile) {
+        Profile updatedProfile = accountProfileService.updateProfile(profileId, profile);
         return ResponseEntity.ok(updatedProfile);
     }
 }

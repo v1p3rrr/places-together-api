@@ -1,9 +1,8 @@
 package com.vpr.placestogetherapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +10,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"groupPlaces", "memberships"})
+@EqualsAndHashCode(exclude = {"groupPlaces", "memberships"})
 @Entity(name = "users_group")
 public class Group {
     @Id
@@ -23,9 +24,11 @@ public class Group {
     @Column(nullable = false)
     private String groupPictureLink = "";
 
+    @JsonIgnore
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<GroupPlace> groupPlaces = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<GroupMembership> memberships = new HashSet<>();
 }

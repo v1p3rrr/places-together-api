@@ -7,6 +7,7 @@ import com.vpr.placestogetherapi.repository.FriendshipRepository;
 import com.vpr.placestogetherapi.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     private final ProfileRepository profileRepository;
 
     @Override
+    @Transactional
     public Friendship requestFriendship(Long profileRequestId, Long profileAcceptId) {
         if (profileRequestId.equals(profileAcceptId)) {
             throw new IllegalArgumentException("A profile cannot have a friendship with itself.");
@@ -48,6 +50,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
+    @Transactional
     public Friendship acceptFriendship(Long profileRequestId, Long profileAcceptId) {
         Profile profileRequest = profileRepository.findById(profileRequestId)
                 .orElseThrow(() -> new NoSuchElementException("ProfileRequest not found"));
@@ -74,6 +77,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
+    @Transactional
     public void removeFriendship(Long profileRequestId, Long profileAcceptId) {
         Profile profileRequest = profileRepository.findById(profileRequestId)
                 .orElseThrow(() -> new NoSuchElementException("ProfileRequest not found"));
@@ -93,6 +97,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Friendship getFriendshipByProfileRequestIdOrProfileAcceptId(Long profileRequestId, Long profileAcceptId) {
         Optional<Friendship> friendship = friendshipRepository.findByProfileRequestIdAndProfileAcceptId(profileRequestId, profileAcceptId);
         return friendship.orElseGet(() -> friendshipRepository.findByProfileRequestIdAndProfileAcceptId(profileAcceptId, profileRequestId)
@@ -100,16 +105,19 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     //useless
+    @Transactional(readOnly = true)
     public Set<Friendship> getFriendshipByProfileRequestId(Long profileRequestId) {
         return friendshipRepository.findByProfileRequestId(profileRequestId);
     }
 
     //useless
+    @Transactional(readOnly = true)
     public Set<Friendship> getFriendshipByProfileAcceptId(Long profileAcceptId) {
         return friendshipRepository.findByProfileAcceptId(profileAcceptId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public FriendshipStatus getFriendshipStatusByTwoProfilesId(Long profileId1, Long profileId2){
         FriendshipStatus status = friendshipRepository.findStatusByProfileRequestIdAndProfileAcceptId(profileId1, profileId2);
         if (status==null){
@@ -119,47 +127,56 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     // useless
+    @Transactional(readOnly = true)
     public Set<Profile> getAllFriendsRequestedProfilesAndStatus(Long profileRequestId, FriendshipStatus friendshipStatus) {
         return profileRepository.findByFriendshipRequestProfileRequestIdAndFriendshipRequestStatus(profileRequestId, friendshipStatus);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Profile> getAllSentFriendshipRequestsProfiles(Long profileRequestId) {
         return profileRepository.findByFriendshipRequestProfileRequestIdAndFriendshipRequestStatus(profileRequestId, FriendshipStatus.REQUESTED);
     }
 
     // useless
+    @Transactional(readOnly = true)
     public Set<Profile> getAllFriendsProfilesByProfileAcceptIdAndStatus(Long profileAcceptId, FriendshipStatus friendshipStatus) {
         return profileRepository.findByFriendshipAcceptProfileAcceptIdAndFriendshipAcceptStatus(profileAcceptId, friendshipStatus);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Profile> getAllIncomingFriendshipRequestsProfiles(Long profileAcceptId) {
         return profileRepository.findByFriendshipAcceptProfileAcceptIdAndFriendshipAcceptStatus(profileAcceptId, FriendshipStatus.REQUESTED);
     }
 
     // useless
+    @Transactional(readOnly = true)
     public Set<Profile> getAllFriendsProfilesByProfileId(Long profileId) {
         return profileRepository.findByFriendshipRequestProfileRequestIdOrFriendshipAcceptProfileAcceptId(profileId, profileId);
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Profile> getAllConfirmedFriendsProfiles(Long profileId){
         return profileRepository.findByFriendshipRequestProfileRequestIdAndFriendshipRequestStatusOrFriendshipAcceptProfileAcceptIdAndFriendshipAcceptStatus(profileId, FriendshipStatus.FRIENDS, profileId, FriendshipStatus.FRIENDS);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean areFriends(Long profile1Id, Long profile2Id){
         return profileRepository.existsByIdAndFriendshipRequestStatusAndFriendshipRequestProfileRequestIdOrIdAndFriendshipAcceptStatusAndFriendshipAcceptProfileAcceptId(profile1Id, FriendshipStatus.FRIENDS, profile2Id, profile1Id, FriendshipStatus.FRIENDS, profile2Id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean hasIncomingRequest(Long profileId, Long requestingSideProfileId){
         return profileRepository.existsByIdAndFriendshipRequestStatusAndFriendshipRequestProfileRequestId(profileId, FriendshipStatus.REQUESTED, requestingSideProfileId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean hasOutcomingRequest(Long profileId, Long acceptingSideProfileId){
         return profileRepository.existsByIdAndFriendshipAcceptStatusAndFriendshipAcceptProfileAcceptId(profileId, FriendshipStatus.REQUESTED, acceptingSideProfileId);
     }

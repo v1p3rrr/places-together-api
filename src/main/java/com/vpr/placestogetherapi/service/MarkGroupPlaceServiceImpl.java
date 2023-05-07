@@ -30,25 +30,25 @@ public class MarkGroupPlaceServiceImpl implements MarkGroupPlaceService {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         MarkPlaceStatus status = MarkPlaceStatus.valueOf(markStatus);
 
-        Place savedPlace = placeRepository.findByDgisId(place.getDgisId()).orElseGet(() -> placeRepository.save(place));
+        Place savedPlace = placeRepository.findByDgisId(place.getDgisId()).orElseGet(() -> placeRepository.saveAndFlush(place));
         GroupPlace groupPlace = groupPlaceRepository.findByGroupAndPlace(group, savedPlace).orElseGet(() -> {
             GroupPlace newGroupPlace = new GroupPlace();
             newGroupPlace.setGroup(group);
             newGroupPlace.setPlace(savedPlace);
-            return groupPlaceRepository.save(newGroupPlace);
+            return groupPlaceRepository.saveAndFlush(newGroupPlace);
         });
 
         Optional<MarkPlace> existingMarkPlace = markRepository.findByProfileAndGroupPlace(profile, groupPlace);
         if (existingMarkPlace.isPresent()) {
             MarkPlace updatedMarkPlace = existingMarkPlace.get();
             updatedMarkPlace.setStatus(status);
-            return markRepository.save(updatedMarkPlace);
+            return markRepository.saveAndFlush(updatedMarkPlace);
         } else {
             MarkPlace markPlace = new MarkPlace();
             markPlace.setProfile(profile);
             markPlace.setGroupPlace(groupPlace);
             markPlace.setStatus(status);
-            return markRepository.save(markPlace);
+            return markRepository.saveAndFlush(markPlace);
         }
     }
 
@@ -76,7 +76,7 @@ public class MarkGroupPlaceServiceImpl implements MarkGroupPlaceService {
         validateMarkPlaceEditor(editorProfile, group, markPlace);
 
         markPlace.setStatus(newStatus);
-        return markRepository.save(markPlace);
+        return markRepository.saveAndFlush(markPlace);
     }
 
     @Override
@@ -110,38 +110,45 @@ public class MarkGroupPlaceServiceImpl implements MarkGroupPlaceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MarkPlace> getMarksByProfileIdAndGroupId(Long profileId, Long groupId) {
         return markRepository.findByProfileIdAndGroupPlaceGroupId(profileId, groupId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MarkPlace> getMarksByGroupIdAndDgisId(Long groupId, Long dgisId) {
         return markRepository.findByGroupPlaceGroupIdAndGroupPlace_Place_dgisId(groupId, dgisId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MarkPlace> getMarksByGroupIdAndPlaceName(Long groupId, String placeName) {
         return markRepository.findByGroupPlaceGroupIdAndGroupPlacePlaceName(groupId, placeName);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MarkPlace> getMarksByGroupId(Long groupId) {
         return markRepository.findByGroupPlaceGroupId(groupId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MarkPlace getMarksByGroupIdAndProfileIdAndPlaceName(Long groupId, Long profileId, String placeName) {
         return markRepository.findByGroupPlaceGroupIdAndProfileIdAndGroupPlacePlaceName(groupId, profileId, placeName)
                 .orElseThrow(() -> new NoSuchElementException("Mark with was not found"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MarkPlace getMarksByGroupIdAndProfileIdAndDgisId(Long groupId, Long profileId, Long dgisId) {
         return markRepository.findByGroupPlaceGroupIdAndProfileIdAndGroupPlace_Place_dgisId(groupId, profileId, dgisId)
                 .orElseThrow(() -> new NoSuchElementException("Mark with was not found"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MarkPlace getMarkById(Long id) {
         return markRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Mark with id " + id + " was not found"));
     }

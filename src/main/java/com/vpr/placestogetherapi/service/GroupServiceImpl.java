@@ -10,6 +10,7 @@ import com.vpr.placestogetherapi.repository.ProfileRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,6 +37,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Group> getGroupsByProfileId(Long profileId) {
         return groupRepository.findByMembershipsProfileId(profileId);
     }
@@ -46,22 +48,26 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<GroupMembership> getGroupMembershipsByGroupId(Long groupId) {
         return groupMembershipRepository.findByGroupId(groupId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<GroupMembership> getGroupMembershipsByProfileId(Long profileId) {
         return groupMembershipRepository.findByProfileId(profileId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GroupMembership getGroupMembershipByGroupIdAndProfileId(Long groupId, Long profileId) {
         return groupMembershipRepository.findByGroupIdAndProfileId(groupId, profileId)
                 .orElseThrow(() -> new NoSuchElementException("Profile with id " + profileId + " not found in group with id " + groupId));
     }
 
     @Override
+    @Transactional
     public Group createGroup(String groupName, Long adminProfileId) {
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Creator's profile not found"));
 
@@ -86,6 +92,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupMembership inviteProfileToGroup(Long groupId, Long invitedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile invitedProfile = profileRepository.findById(invitedProfileId).orElseThrow(() -> new NoSuchElementException("Inviting profile not found"));
@@ -103,6 +110,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupMembership promoteMemberToModerator(Long groupId, Long adminProfileId, Long promotedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Admin's profile not found"));
@@ -124,6 +132,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupMembership promoteToAdmin(Long groupId, Long adminProfileId, Long promotedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Admin's profile not found"));
@@ -145,6 +154,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupMembership demoteModeratorToMember(Long groupId, Long adminProfileId, Long demotedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Admin's profile not found"));
@@ -169,6 +179,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public void leaveGroup(Long groupId, Long leavingProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile leavingProfile = profileRepository.findById(leavingProfileId).orElseThrow(() -> new NoSuchElementException("Leaving profile not found"));
@@ -182,6 +193,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public void removeMemberByModerator(Long groupId, Long moderatorProfileId, Long removedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile moderatorProfile = profileRepository.findById(moderatorProfileId).orElseThrow(() -> new NoSuchElementException("Moderator's profile not found"));
@@ -205,6 +217,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public void removeMemberByAdmin(Long groupId, Long adminProfileId, Long removedProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Admin's profile not found"));
@@ -221,6 +234,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public void deleteGroup(Long groupId, Long adminProfileId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
         Profile adminProfile = profileRepository.findById(adminProfileId).orElseThrow(() -> new NoSuchElementException("Profile not found"));

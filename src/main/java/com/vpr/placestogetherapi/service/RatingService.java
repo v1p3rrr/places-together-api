@@ -11,9 +11,9 @@ public interface RatingService {
 
     void deleteRating(Long editorProfileId, Long groupId, Long placeDgisId, Long ratingId);
 
-    List<RatingPlace> getCommentsByGroupIdAndProfileId(Long groupId, Long profileId);
-    List<RatingPlace> getCommentsByGroupIdAndDgisId(Long groupId, Long dgisId);
-    List<RatingPlace> getCommentsByGroupIdAndPlaceName(Long groupId, String placeName);
-    RatingPlace getCommentByGroupIdAndProfileIdAndDgisId(Long groupId, Long profileId, Long dgisId);
-    RatingPlace getCommentByGroupIdAndProfileIdAndPlaceName(Long groupId, Long profileId, String placeName);
+    List<RatingPlace> getRatingsByGroupIdAndProfileId(Long groupId, Long profileId);
+    List<RatingPlace> getRatingsByGroupIdAndDgisId(Long groupId, Long dgisId);
+    List<RatingPlace> getRatingsByGroupIdAndPlaceName(Long groupId, String placeName);
+    RatingPlace getRatingByGroupIdAndProfileIdAndDgisId(Long groupId, Long profileId, Long dgisId);
+    RatingPlace getRatingByGroupIdAndProfileIdAndPlaceName(Long groupId, Long profileId, String placeName);
 }

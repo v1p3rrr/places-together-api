@@ -29,8 +29,8 @@ public class GroupController {
         return ResponseEntity.ok(groupMemberships);
     }
 
-    @PostMapping("/{groupName}/{adminProfileId}")
-    public ResponseEntity<Group> createGroup(@PathVariable String groupName, @PathVariable Long adminProfileId) {
+    @PostMapping("/create/{adminProfileId}")
+    public ResponseEntity<Group> createGroup(@RequestBody String groupName, @PathVariable Long adminProfileId) {
         Group group = groupService.createGroup(groupName, adminProfileId);
         return ResponseEntity.status(HttpStatus.CREATED).body(group);
     }

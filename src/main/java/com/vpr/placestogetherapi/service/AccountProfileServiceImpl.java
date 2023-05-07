@@ -6,6 +6,7 @@ import com.vpr.placestogetherapi.repository.AccountRepository;
 import com.vpr.placestogetherapi.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,8 +53,14 @@ public class AccountProfileServiceImpl implements AccountProfileService {
     }
 
     @Override
+    @Transactional
     public Account createAccountWithGeneratedProfile(Account account) {
         // Save the account
+
+        if (!account.getPassword().matches("^[a-zA-Z0-9!@#\\$%\\^&\\*\\(\\)_\\+\\-=\\{\\}\\[\\]\\\\\\|:;\"'<>,\\.\\?\\/]*$")) {
+            throw new IllegalArgumentException("password contains forbidden symbols");
+        }
+
         Account savedAccount = accountRepository.save(account);
 
         // Create the profile with the username based on the email before "@"
@@ -70,8 +77,20 @@ public class AccountProfileServiceImpl implements AccountProfileService {
 
         return savedAccount;
     }
+    @Override
+    @Transactional
+    public Account createAccountWithoutProfile(Account account) {
+        // Save the account
+
+        if (!account.getPassword().matches("^[a-zA-Z0-9!@#\\$%\\^&\\*\\(\\)_\\+\\-=\\{\\}\\[\\]\\\\\\|:;\"'<>,\\.\\?\\/]*$")) {
+            throw new IllegalArgumentException("password contains forbidden symbols");
+        }
+
+        return accountRepository.save(account);
+    }
 
     @Override
+    @Transactional(readOnly = true)
     public Profile createProfileAndLinkToAccount(Profile profile, Long accountId) {
         // Find the account by accountId
         Account account = accountRepository.findById(accountId)
@@ -79,6 +98,10 @@ public class AccountProfileServiceImpl implements AccountProfileService {
 
         if (profileRepository.existsByAccountId(accountId)){
             throw new IllegalStateException("Profile for this account already exists");
+        }
+
+        if (!profile.getUsername().matches("^[a-zA-Z0-9!@#$%^&*()-_=+{}\\[\\]|;:'\",.<>/?\\s]+$")) {
+            throw new IllegalArgumentException("Username contains forbidden symbols");
         }
 
         // Link the profile to the account and save it
@@ -97,9 +120,13 @@ public class AccountProfileServiceImpl implements AccountProfileService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalStateException("Account with id " + accountId + " not found"));
 
+        if (!newPassword.matches("^[a-zA-Z0-9!@#\\$%\\^&\\*\\(\\)_\\+\\-=\\{\\}\\[\\]\\\\\\|:;\"'<>,\\.\\?\\/]*$")) {
+            throw new IllegalArgumentException("password contains forbidden symbols");
+        }
+
         account.setPassword(newPassword);
 
-        return accountRepository.save(account);
+        return accountRepository.saveAndFlush(account);
     }
 
     @Override
@@ -109,10 +136,11 @@ public class AccountProfileServiceImpl implements AccountProfileService {
 
         account.setEmail(newEmail);
 
-        return accountRepository.save(account);
+        return accountRepository.saveAndFlush(account);
     }
 
     @Override
+    @Transactional
     public void deleteAccount(Long accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalStateException("Account with id " + accountId + " not found"));
@@ -155,6 +183,17 @@ public class AccountProfileServiceImpl implements AccountProfileService {
         profile.setProfilePictureLink(newProfilePictureLink);
 
         return profileRepository.save(profile);
+    }
+
+    @Override
+    public Profile updateProfile(Long profileId, Profile profile) {
+        Profile extractedProfile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new IllegalStateException("Profile with id " + profileId + " not found"));
+        extractedProfile.setUsername(profile.getUsername());
+        extractedProfile.setStatus(profile.getStatus());
+        extractedProfile.setProfilePictureLink(profile.getProfilePictureLink());
+
+        return profileRepository.save(extractedProfile);
     }
 
 }

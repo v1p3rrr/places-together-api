@@ -1,9 +1,8 @@
 package com.vpr.placestogetherapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +10,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "groupPlaces")
+@EqualsAndHashCode(exclude = "groupPlaces")
 @Entity
 public class Place {
     @Id
@@ -35,6 +36,7 @@ public class Place {
     @Column
     private Long latitude;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<GroupPlace> groupPlaces = new HashSet<>();
 }

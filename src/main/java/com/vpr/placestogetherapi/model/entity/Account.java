@@ -1,10 +1,9 @@
 package com.vpr.placestogetherapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +21,7 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnoreProperties("account")
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 }
