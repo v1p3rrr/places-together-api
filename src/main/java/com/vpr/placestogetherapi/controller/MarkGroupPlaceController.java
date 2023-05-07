@@ -59,20 +59,20 @@ public class MarkGroupPlaceController {
         return ResponseEntity.ok(mark);
     }
 
-    @PostMapping("/mark")
-    public ResponseEntity<MarkPlace> markPlace(@RequestParam Long profileId, @RequestParam Long groupId, @RequestBody Place place, @RequestParam String markStatus) {
+    @PostMapping("/mark/{profileId}/{groupId}/{markStatus}")
+    public ResponseEntity<MarkPlace> markPlace(@PathVariable Long profileId, @PathVariable Long groupId, @RequestBody Place place, @PathVariable String markStatus) {
         MarkPlace mark = markGroupPlaceService.markPlace(profileId, groupId, place, markStatus);
         return ResponseEntity.status(HttpStatus.CREATED).body(mark);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<MarkPlace> updateMark(@RequestParam Long placeDgisId, @RequestParam Long groupId, @RequestParam Long editorProfileId, @RequestParam Long targetProfileId, @RequestParam MarkPlaceStatus newStatus) {
+    @PutMapping("/update/{placeDgisId}/{groupId}/{editorProfileId}/{targetProfileId}/{newStatus}")
+    public ResponseEntity<MarkPlace> updateMark(@PathVariable Long placeDgisId, @PathVariable Long groupId, @PathVariable Long editorProfileId, @PathVariable Long targetProfileId, @PathVariable MarkPlaceStatus newStatus) {
         MarkPlace mark = markGroupPlaceService.updateMark(placeDgisId, groupId, editorProfileId, targetProfileId, newStatus);
         return ResponseEntity.ok(mark);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteMark(@RequestParam Long placeDgisId, @RequestParam Long groupId, @RequestParam Long editorProfileId, @RequestParam Long targetProfileId) {
+    @DeleteMapping("/delete/{placeDgisId}/{groupId}/{editorProfileId}/{targetProfileId}")
+    public ResponseEntity<Void> deleteMark(@PathVariable Long placeDgisId, @PathVariable Long groupId, @PathVariable Long editorProfileId, @PathVariable Long targetProfileId) {
         markGroupPlaceService.deleteMark(placeDgisId, groupId, editorProfileId, targetProfileId);
         return ResponseEntity.noContent().build();
     }

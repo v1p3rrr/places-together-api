@@ -18,13 +18,13 @@ public class FriendshipController {
 
     private final FriendshipService friendshipService;
 
-    @GetMapping("/{profileRequestId}/{profileAcceptId}/request-friendship")
+    @PostMapping("/{profileRequestId}/{profileAcceptId}/request-friendship")
     public ResponseEntity<Friendship> requestFriendship(@PathVariable Long profileRequestId, @PathVariable Long profileAcceptId) {
         Friendship friendship = friendshipService.requestFriendship(profileRequestId, profileAcceptId);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendship);
     }
 
-    @GetMapping("/{profileRequestId}/{profileAcceptId}/accept-friendship")
+    @PostMapping("/{profileRequestId}/{profileAcceptId}/accept-friendship")
     public ResponseEntity<Friendship> acceptFriendship(@PathVariable Long profileRequestId, @PathVariable Long profileAcceptId){
         Friendship friendship = friendshipService.acceptFriendship(profileRequestId, profileAcceptId);
         return ResponseEntity.ok(friendship);
