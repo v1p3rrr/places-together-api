@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,25 @@ public class AccountProfileServiceImpl implements AccountProfileService {
 
     private final AccountRepository accountRepository;
     private final ProfileRepository profileRepository;
+
+    @Override
+    @Transactional
+    public Account createOrUpdateAccountWithOAuth2(String email) {
+        Optional<Account> accountOptional = accountRepository.findAccountByEmail(email);
+        Account account;
+
+        if (accountOptional.isPresent()) {
+            account = accountOptional.get();
+        } else {
+            // Create a new account and profile if they do not exist
+            account = new Account();
+            account.setEmail(email);
+            account.setPassword(""); // Set an empty password as it won't be used
+            account = createAccountWithGeneratedProfile(account);
+        }
+
+        return account;
+    }
 
     @Override
     public Account getAccount(Long accountId) {

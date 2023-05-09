@@ -47,6 +47,12 @@ public class GroupController {
         return ResponseEntity.ok(groupMembership);
     }
 
+    @PatchMapping("/{groupId}/change-name/{adminProfileId}")
+    public ResponseEntity<Group> changeGroupName(@PathVariable Long groupId, @PathVariable Long adminProfileId, @RequestBody String newName) {
+        Group group = groupService.changeGroupName(groupId, adminProfileId, newName);
+        return ResponseEntity.ok(group);
+    }
+
     @PutMapping("/{groupId}/promote-admin/{adminProfileId}/{promotedProfileId}")
     public ResponseEntity<GroupMembership> promoteToAdmin(@PathVariable Long groupId, @PathVariable Long adminProfileId, @PathVariable Long promotedProfileId) {
         GroupMembership groupMembership = groupService.promoteToAdmin(groupId, adminProfileId, promotedProfileId);

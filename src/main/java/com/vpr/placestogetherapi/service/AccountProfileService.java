@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface AccountProfileService {
 
+    Account createOrUpdateAccountWithOAuth2(String email);
+
     Account getAccount(Long accountId);
 
     Profile getProfile(Long profileId);

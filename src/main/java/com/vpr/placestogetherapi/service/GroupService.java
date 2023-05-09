@@ -11,6 +11,8 @@ public interface GroupService {
 
     Group getGroupByName(String groupName);
 
+    Group changeGroupName(Long groupId, Long adminProfileId, String newName);
+
     List<Group> getGroupsByProfileId(Long profileId);
 
     Set<GroupMembership> getGroupMembershipsByGroupId(Long groupId);

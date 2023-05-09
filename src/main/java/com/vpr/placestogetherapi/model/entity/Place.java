@@ -31,10 +31,10 @@ public class Place {
     private String address;
 
     @Column
-    private Long longitude;
+    private Double longitude;
 
     @Column
-    private Long latitude;
+    private Double latitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)

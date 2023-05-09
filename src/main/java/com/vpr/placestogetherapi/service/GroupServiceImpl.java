@@ -37,6 +37,20 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public Group changeGroupName(Long groupId, Long adminProfileId, String newName){
+        Group extractedGroup = groupRepository.findById(groupId)
+                .orElseThrow(() -> new NoSuchElementException("Group with id " + groupId + " not found"));
+
+        GroupMembership adminMembership = groupMembershipRepository.findByGroupIdAndProfileId(groupId, adminProfileId).orElseThrow(() -> new NoSuchElementException("Admin not found in the group"));
+        if (adminMembership.getRole() != GroupMemberRole.ADMIN && adminMembership.getRole() != GroupMemberRole.MODERATOR) {
+            throw new IllegalStateException("Only admins or moderators can change group name");
+        }
+
+        extractedGroup.setName(newName);
+        return groupRepository.save(extractedGroup);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Group> getGroupsByProfileId(Long profileId) {
         return groupRepository.findByMembershipsProfileId(profileId);
