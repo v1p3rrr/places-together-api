@@ -19,7 +19,8 @@ public class SecurityConfig {
 
         http    //.authorizeRequests
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() //todo disable auth
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint

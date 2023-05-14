@@ -7,13 +7,13 @@ import com.vpr.placestogetherapi.model.entity.Account;
 import com.vpr.placestogetherapi.model.entity.IdTokenRequest;
 import com.vpr.placestogetherapi.service.AccountProfileService;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -22,6 +22,7 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication API")
 public class AuthenticationController {
 
     private final AccountProfileService accountProfileService;
@@ -30,7 +31,11 @@ public class AuthenticationController {
     private String webClientId;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<Account> authenticate(@RequestBody IdTokenRequest idTokenRequest) {
+    @Operation(summary = "Authenticate using Google OAuth2")
+    public ResponseEntity<Account> authenticate(
+            @Parameter(description = "The id token issued by Google after authentication")
+            @RequestBody IdTokenRequest idTokenRequest
+    ) {
         // Verify the idToken with Google
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance())
